@@ -3,12 +3,12 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-   background-color: rgb(69, 41, 4);
+    background-color: rgb(73, 40, 20);
     /* background-image: linear-gradient(to bottom right, rgb(123, 107, 241), rgb(110, 33, 242)); */
   }
   
   .navbar {
-    background-color: #2a2601;
+    background-color: #2a1701;
     color: #fff;
     position: sticky;
     top: 0;
@@ -24,7 +24,7 @@ body {
   }
   
   .nav-links a {
-    color: white;
+    color: rgb(10, 9, 9);
     text-decoration: none;
     font-weight: 600;
     margin-left: 15px;
@@ -63,7 +63,7 @@ body {
   }
   
   .book-card {
-    background-color: white;
+    background-color: rgb(224, 161, 161);
     border-radius: 8px;
     padding: 15px;
     width: 200px;
