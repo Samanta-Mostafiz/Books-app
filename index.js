@@ -2,7 +2,20 @@ const apiUrl = 'https://gutendex.com/books';
 let books = [];
 let filteredBooks = [];
 let currentPage = 1;
+const booksPerPage = 10; // Show 10 books per page
 let wishlist = JSON.parse(localStorage.getItem('wishlist')) || [];
+let searchHistory = JSON.parse(localStorage.getItem('searchHistory')) || [];
+
+// Debounce function to limit search API calls
+function debounce(func, delay) {
+  let debounceTimer;
+  return function () {
+    const context = this;
+    const args = arguments;
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(() => func.apply(context, args), delay);
+  };
+}
 
 // Fetch books from API
 async function fetchBooks(page = 1) {
@@ -10,14 +23,19 @@ async function fetchBooks(page = 1) {
   const data = await response.json();
   books = data.results;
   filteredBooks = books;
-  displayBooks(books);
+  displayBooks(filteredBooks);
 }
 
-// Display books in DOM
+// Display books in DOM with pagination
 function displayBooks(books) {
   const booksList = document.getElementById('books-list');
   booksList.innerHTML = '';
-  books.forEach((book) => {
+
+  const startIndex = (currentPage - 1) * booksPerPage;
+  const endIndex = startIndex + booksPerPage;
+  const booksToShow = books.slice(startIndex, endIndex);
+
+  booksToShow.forEach((book) => {
     const bookCard = document.createElement('div');
     bookCard.classList.add('book-card');
 
@@ -30,6 +48,18 @@ function displayBooks(books) {
     `;
     booksList.appendChild(bookCard);
   });
+
+  updatePaginationControls(books.length);
+}
+
+// Update pagination controls (enable/disable buttons based on current page)
+function updatePaginationControls(totalBooks) {
+  document.getElementById('page-number').textContent = `Page ${currentPage}`;
+  
+  const totalPages = Math.ceil(totalBooks / booksPerPage);
+  
+  document.getElementById('prev-page').disabled = currentPage === 1;
+  document.getElementById('next-page').disabled = currentPage === totalPages;
 }
 
 // Toggle wishlist
@@ -43,14 +73,16 @@ function toggleWishlist(bookId) {
   displayBooks(filteredBooks);
 }
 
-// Search books by title
-document.getElementById('search').addEventListener('input', (e) => {
+// Search books by title with debounce
+document.getElementById('search').addEventListener('input', debounce((e) => {
   const searchTerm = e.target.value.toLowerCase();
+  saveSearchHistory(searchTerm);
   filteredBooks = books.filter((book) =>
     book.title.toLowerCase().includes(searchTerm)
   );
+  currentPage = 1; // Reset to first page after search
   displayBooks(filteredBooks);
-});
+}, 300));
 
 // Filter books by genre
 document.getElementById('genre-filter').addEventListener('change', (e) => {
@@ -58,33 +90,63 @@ document.getElementById('genre-filter').addEventListener('change', (e) => {
   filteredBooks = selectedGenre
     ? books.filter((book) => book.subjects.includes(selectedGenre))
     : books;
+  currentPage = 1; // Reset to first page after filter change
   displayBooks(filteredBooks);
 });
 
-// Pagination
+// Pagination - Next and Previous buttons
 document.getElementById('next-page').addEventListener('click', () => {
-  currentPage++;
-  fetchBooks(currentPage);
-  document.getElementById('page-number').textContent = `Page ${currentPage}`;
+  const totalPages = Math.ceil(filteredBooks.length / booksPerPage);
+  if (currentPage < totalPages) {
+    currentPage++;
+    displayBooks(filteredBooks);
+  }
 });
 
 document.getElementById('prev-page').addEventListener('click', () => {
   if (currentPage > 1) {
     currentPage--;
-    fetchBooks(currentPage);
-    document.getElementById('page-number').textContent = `Page ${currentPage}`;
+    displayBooks(filteredBooks);
   }
 });
 
-//  fetching books
+// Save search term to localStorage and update UI
+function saveSearchHistory(searchTerm) {
+  if (searchTerm && !searchHistory.includes(searchTerm)) {
+    searchHistory.push(searchTerm);
+    localStorage.setItem('searchHistory', JSON.stringify(searchHistory));
+  }
+}
+
+// Fetch books
 fetchBooks();
 
 // Wishlist
 document.getElementById('wishlist-link').addEventListener('click', () => {
   const wishlistBooks = books.filter((book) => wishlist.includes(book.id));
+  currentPage = 1; // Reset to first page when displaying wishlist
   displayBooks(wishlistBooks);
 });
 
+// Home link restores filteredBooks
 document.getElementById('home-link').addEventListener('click', () => {
+  currentPage = 1; // Reset to first page when displaying home
   displayBooks(filteredBooks);
 });
+
+// Retrieve search history from localStorage
+function loadSearchHistory() {
+  if (searchHistory.length > 0) {
+    const lastSearch = searchHistory[searchHistory.length - 1];
+    document.getElementById('search').value = lastSearch;
+    filteredBooks = books.filter((book) =>
+      book.title.toLowerCase().includes(lastSearch)
+    );
+    displayBooks(filteredBooks);
+  }
+}
+
+// Load search history on page load
+window.onload = () => {
+  loadSearchHistory();
+};
