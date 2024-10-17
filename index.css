@@ -1,10 +1,58 @@
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Slide-in from the bottom animation for content */
+@keyframes slideInUp {
+  from {
+    transform: translateY(50px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+/* Bounce effect for pagination */
+@keyframes bounceIn {
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Animation for buttons hover (smooth glow effect) */
+@keyframes buttonGlow {
+  from {
+    box-shadow: 0 0 5px #fff, 0 0 10px rgb(121, 139, 231), 0 0 15px rgb(22, 95, 143);
+  }
+  to {
+    box-shadow: 0 0 10px rgb(27, 187, 118), 0 0 20px rgb(0, 255, 187), 0 0 30px rgb(0, 255, 247);
+  }
+}
+
+/* Apply fade-in animation to the body */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   background-color: rgb(48, 24, 9);
+  animation: fadeIn 1s ease-in-out; 
 }
-
 .navbar {
   background-color: #b28b60;
   color: #fff;
@@ -40,6 +88,7 @@ body {
   max-width: 1200px;
   margin: 20px auto;
   padding: 0 15px;
+  animation: slideInUp 1.2s ease-in-out; 
 }
 
 .filters {
@@ -78,15 +127,15 @@ body {
   box-shadow: 10px 10px 5px rgb(2, 113, 161);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
-
 .book-card img {
   width: 100%;
   height: auto;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 5px;
-  max-height: 300px;
-  min-height: 300px;
+  max-height: 300px; 
+  min-height: 300px; 
 }
+
 
 .book-card h3 {
   font-size: 18px;
@@ -117,6 +166,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  animation: bounceIn 0.8s ease-in-out; 
 }
 
 .pagination button {
@@ -126,16 +176,23 @@ body {
   color: white;
   border-radius: 5px;
   cursor: pointer;
+  transition: all 0.3s ease;
+  transform: scale(1);
 }
 
+
 .pagination button:hover {
-  background-color: #11a8ee;
+  background-color: #211e05;
+  animation:buttonGlow 1.5s infinite alternate; 
+  transform: scale(0.8); 
 }
+
 
 .pagination span {
   font-size: 16px;
   color: white;
 }
+
 
 /* Responsive Design */
 @media (max-width: 1200px) {
