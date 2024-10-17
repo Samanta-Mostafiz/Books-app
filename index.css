@@ -7,7 +7,6 @@
   }
 }
 
-/* Slide-in from the bottom animation for content */
 @keyframes slideInUp {
   from {
     transform: translateY(50px);
@@ -19,7 +18,6 @@
   }
 }
 
-/* Bounce effect for pagination */
 @keyframes bounceIn {
   0% {
     transform: scale(0.8);
@@ -35,23 +33,23 @@
   }
 }
 
-/* Animation for buttons hover (smooth glow effect) */
 @keyframes buttonGlow {
   from {
-    box-shadow: 0 0 5px #fff, 0 0 10px rgb(121, 139, 231), 0 0 15px rgb(22, 95, 143);
+    box-shadow: 0 0 5px #fff, 0 0 10px rgb(121, 139, 231),
+      0 0 15px rgb(22, 95, 143);
   }
   to {
-    box-shadow: 0 0 10px rgb(27, 187, 118), 0 0 20px rgb(0, 255, 187), 0 0 30px rgb(0, 255, 247);
+    box-shadow: 0 0 10px rgb(27, 187, 118), 0 0 20px rgb(0, 255, 187),
+      0 0 30px rgb(0, 255, 247);
   }
 }
 
-/* Apply fade-in animation to the body */
 body {
   font-family: Arial, sans-serif;
   margin: 0;
   padding: 0;
   background-color: rgb(48, 24, 9);
-  animation: fadeIn 1s ease-in-out; 
+  animation: fadeIn 1s ease-in-out;
 }
 .navbar {
   background-color: #b28b60;
@@ -88,7 +86,7 @@ body {
   max-width: 1200px;
   margin: 20px auto;
   padding: 0 15px;
-  animation: slideInUp 1.2s ease-in-out; 
+  animation: slideInUp 1.2s ease-in-out;
 }
 
 .filters {
@@ -97,7 +95,8 @@ body {
   margin-bottom: 20px;
 }
 
-.filters input, .filters select {
+.filters input,
+.filters select {
   padding: 10px;
   width: 45%;
 }
@@ -132,10 +131,9 @@ body {
   height: auto;
   object-fit: contain;
   border-radius: 5px;
-  max-height: 300px; 
-  min-height: 300px; 
+  max-height: 300px;
+  min-height: 300px;
 }
-
 
 .book-card h3 {
   font-size: 18px;
@@ -148,16 +146,16 @@ body {
 }
 
 .book-card button {
-  font-size: 24px;  
-  padding: 10px 15px;  
-  border-radius: 50%;  
+  font-size: 24px;
+  padding: 10px 15px;
+  border-radius: 50%;
   background-color: transparent;
   border: none;
   cursor: pointer;
 }
 
 .book-card button:hover {
-  background-color: rgba(0, 0, 0, 0.1);  
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
 .pagination {
@@ -166,7 +164,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  animation: bounceIn 0.8s ease-in-out; 
+  animation: bounceIn 0.8s ease-in-out;
 }
 
 .pagination button {
@@ -180,49 +178,46 @@ body {
   transform: scale(1);
 }
 
-
 .pagination button:hover {
   background-color: #211e05;
-  animation:buttonGlow 1.5s infinite alternate; 
-  transform: scale(0.8); 
+  animation: buttonGlow 1.5s infinite alternate;
+  transform: scale(0.8);
 }
-
 
 .pagination span {
   font-size: 16px;
   color: white;
 }
 
-
 /* Responsive Design */
 @media (max-width: 1200px) {
   .book-card {
-      width: calc(33.33% - 20px); 
+    width: calc(33.33% - 20px);
   }
 }
 
 @media (max-width: 768px) {
   .book-card {
-      width: calc(50% - 20px); 
+    width: calc(50% - 20px);
   }
 }
 
 @media (max-width: 576px) {
   .navbar {
-    padding: 10px; 
-    height: auto; 
+    padding: 10px;
+    height: auto;
   }
 
   .navbar h1 {
-    font-size: 18px; 
+    font-size: 18px;
   }
 
   .nav-links a {
-    font-size: 14px; 
-    padding: 5px 10px; 
+    font-size: 14px;
+    padding: 5px 10px;
   }
 
   .book-card {
-      width: calc(100% - 20px); 
+    width: calc(100% - 20px);
   }
 }
