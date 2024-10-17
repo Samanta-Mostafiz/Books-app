@@ -1,49 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Books App</title>
-  <link rel="stylesheet" href="index.css">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
-<body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Books App</title>
+    <link rel="stylesheet" href="index.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body>
+    <nav class="navbar">
+      <h1>
+        Books App <span><i class="fa-solid fa-book-open"></i></span>
+      </h1>
+      <div class="nav-links">
+        <a href="#" id="home-link">Home</a>
+        <a href="#" id="wishlist-link">Wishlist</a>
+      </div>
+    </nav>
 
-  <!-- Navbar -->
-  <nav class="navbar">
-    <h1>Books App <span><i class="fa-solid fa-book-open"></i></span></h1>
- 
-    <div class="nav-links">
-      <a href="#" id="home-link">Home</a>
-      <a href="#" id="wishlist-link">Wishlist</a>
+    <div class="container">
+      <div id="loading" style="display: none;">Loading...</div>
+      <div class="filters">
+        <input type="text" id="search" placeholder="Search by title..." />
+        <select id="genre-filter">
+          <option value="">All Genres</option>
+          <option value="science fiction">Science Fiction</option>
+          <option value="gothic fiction">Gothic Fiction</option>
+          <option value="drama">Drama</option>
+          <option value="love stories">Love Stories</option>
+        </select>
+      </div>
+
+      <div id="books-list" class="books-list"></div>
+      <div class="pagination">
+        <button id="prev-page">Previous</button>
+        <span id="page-number">Page 1</span>
+        <button id="next-page">Next</button>
+      </div>
     </div>
-  </nav>
-
-  <!-- Main Content -->
-  <div class="container">
-    <!-- Search and Filter -->
-    <div class="filters">
-      <input type="text" id="search" placeholder="Search by title..." />
-      <select id="genre-filter">
-        <option value="">All Genres</option>
-        <option value="Fiction">Fiction</option>
-        <option value="Drama">Drama</option>
-        <option value="Philosophy">Philosophy</option>
-      </select>
-    </div>
-
-    <!-- Books List -->
-    <div id="books-list" class="books-list"></div>
-
-    <!-- Pagination -->
-    <div class="pagination">
-      <button id="prev-page">Previous</button>
-      <span id="page-number">Page 1</span>
-      <button id="next-page">Next</button>
-    </div>
-  </div>
-
-  <!-- JavaScript -->
-  <script src="index.js"></script>
-</body>
+    <!-- cdn of js -->
+    <script src="index.js"></script>
+  </body>
 </html>
