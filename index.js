@@ -73,7 +73,7 @@ function displayBooks(books) {
         book.subjects.length > 0 ? book.subjects.join(", ") : "N/A"
       }</p>
       <button onclick="toggleWishlist(${book.id})">${
-      isInWishlist ? "💖" : "🤍"
+      isInWishlist ? "📕" : "📖"
     }</button>
     `;
     booksList.appendChild(bookCard);
