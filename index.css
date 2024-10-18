@@ -68,7 +68,8 @@ body {
   color: #333;
 }
 
-.nav-links a {
+.nav
+ a {
   color: rgb(10, 9, 9);
   text-decoration: none;
   font-weight: 600;
@@ -78,7 +79,7 @@ body {
   border-radius: 5px;
 }
 
-.nav-links a:hover {
+.nav a:hover {
   background-color: #b90e0e;
 }
 
@@ -212,7 +213,7 @@ body {
     font-size: 18px;
   }
 
-  .nav-links a {
+  .nav a {
     font-size: 14px;
     padding: 5px 10px;
   }

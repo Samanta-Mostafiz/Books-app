@@ -5,14 +5,15 @@ let currentPage = 1;
 const booksPerPage = 10;
 let wishlist = JSON.parse(localStorage.getItem("wishlist")) || [];
 let isLoading = false;
+let currentState = "home";
 
 function debounce(func, delay) {
   let debounceTimer;
   return function () {
     const context = this;
-    const args = arguments;
+    const arg = arguments;
     clearTimeout(debounceTimer);
-    debounceTimer = setTimeout(() => func.apply(context, args), delay);
+    debounceTimer = setTimeout(() => func.apply(context, arg), delay);
   };
 }
 
@@ -28,13 +29,14 @@ function hideLoading() {
   isLoading = false;
 }
 
+// data fetching
 async function fetchBooks() {
   if (books.length === 0) {
     showLoading();
     const response = await fetch(apiUrl);
     const data = await response.json();
     books = data.results;
-    localStorage.setItem("books", JSON.stringify(books)); // Cache data
+    localStorage.setItem("books", JSON.stringify(books));
     hideLoading();
   }
 
@@ -54,8 +56,15 @@ function displayBooks(books) {
     const bookCard = document.createElement("div");
     bookCard.classList.add("book-card");
 
+    const bookImage =
+      book.formats["image/jpeg"] || "path/to/placeholder-image.jpg";
+
+    const isInWishlist = wishlist.some(
+      (wishlistBook) => wishlistBook.id === book.id
+    );
+
     bookCard.innerHTML = `
-      <img src="${book.formats["image/jpeg"]}" alt="${book.title}" />
+      <img src="${bookImage}" alt="${book.title}" />
       <h3>${book.title}</h3>
       <p>Author: ${
         book.authors.length > 0 ? book.authors[0].name : "Unknown"
@@ -64,7 +73,7 @@ function displayBooks(books) {
         book.subjects.length > 0 ? book.subjects.join(", ") : "N/A"
       }</p>
       <button onclick="toggleWishlist(${book.id})">${
-      wishlist.includes(book.id) ? "💖" : "🤍"
+      isInWishlist ? "💖" : "🤍"
     }</button>
     `;
     booksList.appendChild(bookCard);
@@ -73,9 +82,43 @@ function displayBooks(books) {
   updatePaginationControls(filteredBooks.length);
 }
 
+function displayWishlist() {
+  const booksList = document.getElementById("books-list");
+  booksList.innerHTML = "";
+
+  if (wishlist.length === 0) {
+    booksList.innerHTML = "<p>No books in your wishlist yet!</p>";
+    return;
+  }
+
+  wishlist.forEach((book) => {
+    if (book && book.formats) {
+      const bookCard = document.createElement("div");
+      bookCard.classList.add("book-card");
+
+      const bookImage =
+        book.formats["image/jpeg"] || "path/to/placeholder-image.jpg";
+
+      bookCard.innerHTML = `
+        <img src="${bookImage}" alt="${book.title}" />
+        <h3>${book.title}</h3>
+        <p>Author: ${
+          book.authors.length > 0 ? book.authors[0].name : "Unknown"
+        }</p>
+        <p>Genre: ${
+          book.subjects.length > 0 ? book.subjects.join(", ") : "N/A"
+        }</p>
+        <button onclick="toggleWishlist(${book.id})">💖</button>
+      `;
+      booksList.appendChild(bookCard);
+    } else {
+      console.warn("Book is undefined or missing required properties", book);
+    }
+  });
+}
+
 function updatePaginationControls(totalBooks) {
   document.getElementById("page-number").textContent = `Page ${currentPage}`;
-
   const totalPages = Math.ceil(totalBooks / booksPerPage);
 
   document.getElementById("prev-page").disabled = currentPage === 1;
@@ -83,13 +126,31 @@ function updatePaginationControls(totalBooks) {
 }
 
 function toggleWishlist(bookId) {
-  if (wishlist.includes(bookId)) {
-    wishlist = wishlist.filter((id) => id !== bookId);
-  } else {
-    wishlist.push(bookId);
+  const bookToAdd =
+    books.find((book) => book.id === bookId) ||
+    filteredBooks.find((book) => book.id === bookId);
+
+  if (!bookToAdd) {
+    console.error("Book not found");
+    return;
   }
+
+  const wishlistIndex = wishlist.findIndex((book) => book.id === bookId);
+
+  if (wishlistIndex !== -1) {
+    wishlist.splice(wishlistIndex, 1);
+  } else {
+    wishlist.push({ ...bookToAdd });
+  }
+
   localStorage.setItem("wishlist", JSON.stringify(wishlist));
-  displayBooks(filteredBooks);
+  console.log("Wishlist updated:", wishlist);
+
+  if (currentState === "home") {
+    displayBooks(filteredBooks);
+  } else {
+    displayWishlist();
+  }
 }
 
 const searchInput = document.getElementById("search");
@@ -111,11 +172,11 @@ function filterBooks() {
   const query = searchInput.value.toLowerCase();
   const genre = genreFilter.value.toLowerCase();
   filteredBooks = books.filter((book) => {
-    const matchesSearch = book.title.toLowerCase().includes(query);
-    const matchesGenre = genre
+    const matchedSearch = book.title.toLowerCase().includes(query);
+    const matchedGenre = genre
       ? book.subjects.some((subject) => subject.toLowerCase().includes(genre))
       : true;
-    return matchesSearch && matchesGenre;
+    return matchedSearch && matchedGenre;
   });
 
   displayBooks(filteredBooks);
@@ -145,5 +206,17 @@ document.getElementById("next-page").addEventListener("click", () => {
 function scrollToTop() {
   window.scrollTo(0, 0);
 }
+
+document.getElementById("home").addEventListener("click", () => {
+  currentState = "home";
+  currentPage = 1;
+  displayBooks(filteredBooks);
+});
+
+document.getElementById("wishlist").addEventListener("click", () => {
+  current = "wishlist";
+  console.log("Displaying wishlist");
+  displayWishlist();
+});
 
 fetchBooks();
